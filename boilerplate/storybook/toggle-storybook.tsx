@@ -17,7 +17,7 @@ export function ToggleStorybook(props) {
   const [StorybookUIRoot, setStorybookUIRoot] = useState(null)
 
   useEffect(() => {
-    if (__DEV__) {
+    if (true) {
       // Load the setting from storage if it's there
       loadString("devStorybook").then((storedSetting) => {
         // Set the initial value
@@ -30,10 +30,11 @@ export function ToggleStorybook(props) {
             show = !show
 
             // Write it back to storage
-            saveString("devStorybook", show ? "on" : "off")
+            saveString("devStorybook", "on")
+            console.log('me')
 
             // Return it to change the local state
-            return show
+            return true
           })
         })
 
@@ -43,7 +44,7 @@ export function ToggleStorybook(props) {
     }
   }, [])
 
-  if (showStorybook) {
+  if (__DEV__) {
     return StorybookUIRoot ? <StorybookUIRoot /> : null
   } else {
     return props.children
