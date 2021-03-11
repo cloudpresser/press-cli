@@ -1,15 +1,15 @@
 {
-  "name": "ignite-cli",
+  "name": "press-cli",
   "version": "4.0.0",
   "description": "Infinite Red's hottest boilerplate for React Native.",
   "bin": {
-    "ignite": "bin/ignite",
-    "ignite-cli": "bin/ignite"
+    "press": "bin/press",
+    "press-cli": "bin/press"
   },
   "preferGlobal": true,
   "license": "MIT",
-  "repository": "infinitered/ignite",
-  "homepage": "https://github.com/infinitered/ignite",
+  "repository": "infinitered/press",
+  "homepage": "https://github.com/infinitered/press",
   "files": [
     "boilerplate",
     "build",
@@ -20,7 +20,7 @@
   "author": {
     "name": "Infinite Red",
     "email": "npm@infinite.red",
-    "url": "https://github.com/infinitered/ignite"
+    "url": "https://github.com/infinitered/press"
   },
   "scripts": {
     "compile": "tsc -p .",

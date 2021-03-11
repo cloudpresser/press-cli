@@ -1,6 +1,6 @@
-# Welcome to your new ignited app!
+# Welcome to your new pressd app!
 
-[![CircleCI](https://circleci.com/gh/infinitered/ignite.svg?style=svg)](https://circleci.com/gh/infinitered/ignite)
+[![CircleCI](https://circleci.com/gh/infinitered/press.svg?style=svg)](https://circleci.com/gh/infinitered/press)
 
 ## The latest and greatest boilerplate for Infinite Red opinions
 
@@ -16,10 +16,10 @@ Currently includes:
 
 ## Quick Start
 
-The Ignite boilerplate project's structure will look similar to this:
+The press boilerplate project's structure will look similar to this:
 
 ```
-ignite-project
+press-project
 ├── app
 │   ├── components
 │   ├── i18n
@@ -53,16 +53,16 @@ ignite-project
 │   ├── gradlew.bat
 │   ├── keystores
 │   └── settings.gradle
-├── ignite
-│   ├── ignite.json
+├── press
+│   ├── press.json
 │   └── plugins
 ├── index.js
 ├── ios
-│   ├── IgniteProject
-│   ├── IgniteProject-tvOS
-│   ├── IgniteProject-tvOSTests
-│   ├── IgniteProject.xcodeproj
-│   └── IgniteProjectTests
+│   ├── pressProject
+│   ├── pressProject-tvOS
+│   ├── pressProject-tvOSTests
+│   ├── pressProject.xcodeproj
+│   └── pressProjectTests
 ├── .env
 └── package.json
 
@@ -70,7 +70,7 @@ ignite-project
 
 ### ./app directory
 
-Included in an Ignite boilerplate project is the `app` directory. This is a directory you would normally have to create when using vanilla React Native.
+Included in an press boilerplate project is the `app` directory. This is a directory you would normally have to create when using vanilla React Native.
 
 The inside of the src directory looks similar to the following:
 
@@ -113,9 +113,9 @@ This is a great place to put miscellaneous helpers and utilities. Things like da
 
 **app.tsx** This is the entry point to your app. This is where you will find the main App component which renders the rest of the application.
 
-### ./ignite directory
+### ./press directory
 
-The `ignite` directory stores all things Ignite, including CLI and boilerplate items. Here you will find generators, plugins and examples to help you get started with React Native.
+The `press` directory stores all things press, including CLI and boilerplate items. Here you will find generators, plugins and examples to help you get started with React Native.
 
 ### ./storybook directory
 
@@ -140,6 +140,6 @@ Read [e2e setup instructions](./e2e/README.md).
 
 ## Previous Boilerplates
 
-- [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
+- [2018 aka Bowser](https://github.com/infinitered/press-bowser)
+- [2017 aka Andross](https://github.com/infinitered/press-andross)
+- [2016 aka press 1.0](https://github.com/infinitered/press-ir-boilerplate-2016)

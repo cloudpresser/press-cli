@@ -1,7 +1,7 @@
 import { GluegunToolbox } from "gluegun"
 
 module.exports = {
-  description: "🔥 The Ignite CLI 🔥",
+  description: "🔥 The Press CLI 🔥",
   run: async (toolbox: GluegunToolbox) => {
     const {
       parameters: { first },
@@ -9,7 +9,7 @@ module.exports = {
     } = toolbox
 
     if (first !== undefined) {
-      error(`ignite '${first}' is not a command`)
+      error(`press '${first}' is not a command`)
     } else {
       return require("./help").run(toolbox)
     }

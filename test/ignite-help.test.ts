@@ -1,9 +1,9 @@
-import { runIgnite } from "./_test-helpers"
+import { runpress } from "./_test-helpers"
 
-test(`ignite help`, async (done) => {
-  const result = await runIgnite(`help`)
+test(`press help`, async (done) => {
+  const result = await runpress(`help`)
 
-  expect(result).toContain("Ignite")
+  expect(result).toContain("press")
   expect(result).toContain("new")
   expect(result).toContain("generate")
   expect(result).toContain("doctor")
