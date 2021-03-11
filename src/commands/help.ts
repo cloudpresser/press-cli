@@ -5,7 +5,7 @@ import { p, command, heading, pressHeading, direction, link } from "../tools/pre
 module.exports = {
   dashed: true,
   alias: ["h"],
-  description: "Displays press CLI help",
+  description: "Displays Press CLI help",
   run: async (toolbox: GluegunToolbox) => {
     const { meta, parameters } = toolbox
 
@@ -20,9 +20,9 @@ module.exports = {
     }
 
     pressHeading()
-    heading(`Welcome to press ${meta.version()}!`)
+    heading(`Welcome to Press ${meta.version()}!`)
     p()
-    p("press is a CLI that helps you spin up a new React Native app using a")
+    p("Press is a CLI that helps you spin up a new React Native app using a")
     p("battle-tested tech stack.")
     p()
     heading("Commands")
