@@ -54,9 +54,9 @@ export default {
     // welcome everybody!
     p("\n")
     pressHeading()
-    p(` █ Creating ${magenta(projectName)} using ${red("press")} ${meta.version()}`)
-    p(` █ Powered by ${red("CloudPresser")} - https://cloudpresser.com`)
-    p(` █ Using ${cyan(cli)}`)
+    p(` █ Creating ${magenta(projectName)} using ${cyan("press")} ${meta.version()}`)
+    p(` █ Powered by ${cyan("CloudPresser")} - https://cloudpresser.com`)
+    p(` █ Using ${red(cli)}`)
     p(` ────────────────────────────────────────────────\n`)
     p(`🔥 Pressing app`)
 
@@ -65,7 +65,6 @@ export default {
       env: cliEnv,
       onProgress: (out: string) => {
         out = log(out.toString())
-
         if (expo) {
           if (out.includes("Using Yarn")) p(`🪔 Summoning Expo CLI`)
           if (out.includes("project is ready")) p(`🎫 Cleaning up Expo install`)

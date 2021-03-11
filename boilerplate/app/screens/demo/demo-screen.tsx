@@ -149,7 +149,7 @@ export const DemoScreen = observer(function DemoScreen() {
         <View style={LOVE_WRAPPER}>
           <Text style={LOVE} text="Made with" />
           <Image source={heart} style={HEART} />
-          <Text style={LOVE} text="by Infinite Red" />
+          <Text style={LOVE} text="by CloudPresser" />
         </View>
       </Screen>
     </View>

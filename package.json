@@ -1,7 +1,7 @@
 {
   "name": "press-cli",
-  "version": "4.0.0",
-  "description": "Infinite Red's hottest boilerplate for React Native.",
+  "version": "0.0.1",
+  "description": "CloudPresser's all-inclusive React Native command line tool.",
   "bin": {
     "press": "bin/press",
     "press-cli": "bin/press"
@@ -18,7 +18,7 @@
     "template.config.js"
   ],
   "author": {
-    "name": "Infinite Red",
+    "name": "CloudPresser",
     "email": "npm@infinite.red",
     "url": "https://github.com/infinitered/press"
   },

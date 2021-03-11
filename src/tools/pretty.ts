@@ -1,6 +1,6 @@
 import { print } from "gluegun/print"
 
-const { cyan, gray, white, bold, red, yellow } = print.colors
+const { cyan, gray, white, bold, yellow } = print.colors
 const { underline } = print.colors
 
 export const p = (m = "") => print.info(gray(`   ${m}`))
@@ -9,10 +9,20 @@ export const link = (m = "") => underline(white(m))
 // export const pressHeading = (m = "") => p(red(bold(m)))
 export const pressHeading = () =>
   p(
-    red(
-      bold(
-        "· · · · · · · · · · · · · · · · · · 🔥 press 🔥 · · · · · · · · · · · · · · · · · ·\n",
-      ),
+    cyan(`
+     ___         ___           ___           ___           ___      
+    /\\  \\       /\\  \\         /\\__\\         /\\__\\         /\\__\\     
+   /::\\  \\     /::\\  \\       /:/ _/_       /:/ _/_       /:/ _/_    
+  /:/\\:\\__\\   /:/\\:\\__\\     /:/ /\\__\\     /:/ /\\  \\     /:/ /\\  \\   
+ /:/ /:/  /  /:/ /:/  /    /:/ /:/ _/_   /:/ /::\\  \\   /:/ /::\\  \\  
+/:/_/:/  /  /:/_/:/__/___ /:/_/:/ /\\__\\ /:/_/:/\\:\\__\\ /:/_/:/\\:\\__\\ 
+\\:\\/:/  /   \\:\\/:::::/  / \\:\\/:/ /:/  / \\:\\/:/ /:/  / \\:\\/:/ /:/  / 
+ \\::/__/     \\::/~~/~~~~   \\::/_/:/  /   \\::/ /:/  /   \\::/ /:/  /  
+  \\:\\  \\      \\:\\~~\\        \\:\\/:/  /     \\/_/:/  /     \\/_/:/  /   
+   \\:\\__\\      \\:\\__\\        \\::/  /        /:/  /        /:/  /    
+    \\/__/       \\/__/         \\/__/         \\/__/         \\/__/     
+    
+    `,
     ),
   )
 export const command = (m = "", second = "", examples: string[] = []) => {

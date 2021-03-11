@@ -2,9 +2,9 @@
 
 [![CircleCI](https://circleci.com/gh/infinitered/press.svg?style=svg)](https://circleci.com/gh/infinitered/press)
 
-## The latest and greatest boilerplate for Infinite Red opinions
+## The latest and greatest boilerplate for CloudPresser opinions
 
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
+This is the boilerplate that [CloudPresser](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
 
 Currently includes:
 
