@@ -6,12 +6,12 @@ const { underline } = print.colors
 export const p = (m = "") => print.info(gray(`   ${m}`))
 export const heading = (m = "") => p(white(bold(m)))
 export const link = (m = "") => underline(white(m))
-// export const igniteHeading = (m = "") => p(red(bold(m)))
-export const igniteHeading = () =>
+// export const pressHeading = (m = "") => p(red(bold(m)))
+export const pressHeading = () =>
   p(
     red(
       bold(
-        "· · · · · · · · · · · · · · · · · · 🔥 Ignite 🔥 · · · · · · · · · · · · · · · · · ·\n",
+        "· · · · · · · · · · · · · · · · · · 🔥 press 🔥 · · · · · · · · · · · · · · · · · ·\n",
       ),
     ),
   )

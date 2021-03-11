@@ -2,7 +2,7 @@ import { GluegunToolbox } from "../types"
 import { spawnProgress } from "../tools/spawn"
 import { isAndroidInstalled } from "../tools/react-native"
 import { packager } from "../tools/packager"
-import { p, heading, command, direction, igniteHeading } from "../tools/pretty"
+import { p, heading, command, direction, pressHeading } from "../tools/pretty"
 
 export default {
   run: async (toolbox: GluegunToolbox) => {
@@ -20,13 +20,13 @@ export default {
     const projectName = validateProjectName(toolbox)
     const projectNameKebab = kebabCase(projectName)
 
-    // if they pass in --boilerplate, warn them to use old Ignite
+    // if they pass in --boilerplate, warn them to use old press
     const bname = parameters.options.b || parameters.options.boilerplate
     if (bname) {
       p()
-      p(yellow(`Different boilerplates are no longer supported in Ignite v4+.`))
+      p(yellow(`Different boilerplates are no longer supported in press v4+.`))
       p(gray(`To use the old CLI to support different boilerplates, try:`))
-      p(cyan(`npx ignite-cli@3 new ${projectName} --boilerplate ${bname}`))
+      p(cyan(`npx press-cli@3 new ${projectName} --boilerplate ${bname}`))
       process.exit(1)
     }
 
@@ -40,25 +40,25 @@ export default {
     // expo or no?
     const expo = Boolean(parameters.options.expo)
     const cli = expo ? "expo-cli" : "react-native-cli"
-    const ignitePath = path(`${meta.src}`, "..")
-    const boilerplatePath = path(ignitePath, "boilerplate")
+    const pressPath = path(`${meta.src}`, "..")
+    const boilerplatePath = path(pressPath, "boilerplate")
     const cliEnv = expo && debug ? { ...process.env, EXPO_DEBUG: 1 } : process.env
     const cliString = expo
       ? `npx expo-cli init ${projectName} --template ${boilerplatePath} --non-interactive`
-      : `npx react-native init ${projectName} --template file://${ignitePath}${
+      : `npx react-native init ${projectName} --template file://${pressPath}${
           debug ? " --verbose" : ""
         }`
 
-    log({ expo, cli, ignitePath, boilerplatePath, cliString })
+    log({ expo, cli, pressPath, boilerplatePath, cliString })
 
     // welcome everybody!
     p("\n")
-    igniteHeading()
-    p(` █ Creating ${magenta(projectName)} using ${red("Ignite")} ${meta.version()}`)
-    p(` █ Powered by ${red("Infinite Red")} - https://infinite.red`)
+    pressHeading()
+    p(` █ Creating ${magenta(projectName)} using ${red("press")} ${meta.version()}`)
+    p(` █ Powered by ${red("CloudPresser")} - https://cloudpresser.com`)
     p(` █ Using ${cyan(cli)}`)
     p(` ────────────────────────────────────────────────\n`)
-    p(`🔥 Igniting app`)
+    p(`🔥 Pressing app`)
 
     // generate the project
     await spawnProgress(log(cliString), {
@@ -164,7 +164,7 @@ export default {
           \\rm -rf ./.git
           git init;
           git add -A;
-          git commit -m "New Ignite ${meta.version()} app";
+          git commit -m "New press ${meta.version()} app";
         `),
       )
     }
@@ -177,7 +177,7 @@ export default {
 
     p()
     p()
-    heading(`${red("Ignite CLI")} ignited ${yellow(projectName)} in ${gray(`${perfDuration}s`)}`)
+    heading(`${red("press CLI")} pressd ${yellow(projectName)} in ${gray(`${perfDuration}s`)}`)
     p()
     direction(`To get started:`)
     command(`  cd ${projectName}`)
@@ -195,7 +195,7 @@ export default {
           "instructions at https://facebook.github.io/react-native/docs/getting-started.html",
         )
         direction(
-          "before using ignite. You won't be able to run Android successfully until you have.",
+          "before using press. You won't be able to run Android successfully until you have.",
         )
       }
     }
@@ -205,6 +205,6 @@ export default {
     direction("Join our Slack community at http://community.infinite.red.")
     p()
     heading("Now get cooking! 🍽")
-    igniteHeading()
+    pressHeading()
   },
 }

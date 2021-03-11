@@ -19,8 +19,8 @@ export function validateProjectName(toolbox: GluegunToolbox): string {
     print.info(`Info: You provided more than one argument for <projectName>. The first one (${projectName}) will be used and the rest are ignored.`) // prettier-ignore
   }
 
-  // guard against `ignite new ignite`
-  if (projectName.toLowerCase() === "ignite") {
+  // guard against `press new press`
+  if (projectName.toLowerCase() === "press") {
     print.error(
       `Hey...that's my name! Please name your project something other than '${projectName}'.`,
     )

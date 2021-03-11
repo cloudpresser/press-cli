@@ -1,37 +1,37 @@
 import { filesystem, GluegunToolbox, strings } from "gluegun"
 import * as ejs from "ejs"
-import { command, heading, igniteHeading, p, warning } from "./pretty"
+import { command, heading, pressHeading, p, warning } from "./pretty"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function showGeneratorHelp(toolbox: GluegunToolbox) {
-  const inIgnite = isIgniteProject()
-  const generators = inIgnite ? installedGenerators() : []
+  const inpress = ispressProject()
+  const generators = inpress ? installedGenerators() : []
 
-  igniteHeading()
-  heading("Ignite Generators")
+  pressHeading()
+  heading("press Generators")
   p()
-  p("When you create a new app with Ignite CLI, it will install several generator")
-  p("templates in the project folder under the `ignite/templates` folder.")
+  p("When you create a new app with press CLI, it will install several generator")
+  p("templates in the project folder under the `press/templates` folder.")
   p()
   heading("Commands")
   p()
-  command("--list  ", "List installed generators", ["ignite g --list"])
+  command("--list  ", "List installed generators", ["press g --list"])
   command(
     "--update",
-    "Update installed generators. You can also use the 'ignite update X' format",
-    ["ignite g --update", `ignite g model --update`, `ignite update model`, `ignite update --all`],
+    "Update installed generators. You can also use the 'press update X' format",
+    ["press g --update", `press g model --update`, `press update model`, `press update --all`],
   )
   warning("          ⚠️  this erases any customizations you've made!")
   p()
   heading("Installed generators")
   p()
-  if (inIgnite) {
+  if (inpress) {
     const longestGen = generators.reduce((c, g) => Math.max(c, g.length), 0)
     generators.forEach((g) => {
-      command(g.padEnd(longestGen), `generates a ${g}`, [`ignite g ${g} Demo`])
+      command(g.padEnd(longestGen), `generates a ${g}`, [`press g ${g} Demo`])
     })
   } else {
-    warning("⚠️  Not in an Ignite project root. Go to your Ignite project root to see generators.")
+    warning("⚠️  Not in an press project root. Go to your press project root to see generators.")
   }
 }
 
@@ -61,13 +61,13 @@ export function updateGenerators(toolbox: GluegunToolbox) {
   })
 }
 
-export function isIgniteProject(): boolean {
-  return filesystem.exists("./ignite") === "dir"
+export function ispressProject(): boolean {
+  return filesystem.exists("./press") === "dir"
 }
 
-function igniteDir() {
+function pressDir() {
   const cwd = process.cwd()
-  return filesystem.path(cwd, "ignite")
+  return filesystem.path(cwd, "press")
 }
 
 function appDir() {
@@ -76,7 +76,7 @@ function appDir() {
 }
 
 function templatesDir() {
-  return filesystem.path(igniteDir(), "templates")
+  return filesystem.path(pressDir(), "templates")
 }
 
 /**
@@ -91,28 +91,35 @@ export function installedGenerators(): string[] {
 }
 
 type GeneratorOptions = {
-  name: string
+  name: string,
+  props?: string[],
+  navigators?: string[]
 }
 
 /**
  * Generates something using a template
  */
-export function generateFromTemplate(generator: string, options: GeneratorOptions): string[] {
+export function generateFromTemplate(generator: string, options: GeneratorOptions, toolbox:GluegunToolbox): string[] [] {
   const { find, path, dir, copy, separator } = filesystem
   const { pascalCase, kebabCase, pluralize, camelCase } = strings
-
+  // console.log(options.props)
+  const componentProps = options.props.length > 0 ? options.props.map(prop => ({ prop: prop.split(':')[0], type: prop.split(':')[1] })) : [{ prop: 'text', type: 'string' }]
+  console.log(componentProps)
   // permutations of the name
   const pascalCaseName = pascalCase(options.name)
   const kebabCaseName = kebabCase(options.name)
   const camelCaseName = camelCase(options.name)
 
   // passed into the template generator
-  const props = { camelCaseName, kebabCaseName, pascalCaseName }
+  const props = { camelCaseName, kebabCaseName, pascalCaseName, componentProps }
 
   // where are we copying from?
   const templateDir = path(templatesDir(), generator)
   // where are we copying to?
-  const destinationDir = path(appDir(), pluralize(generator), kebabCaseName)
+  let destinationDir
+  destinationDir = generator != 'navigator' ? path(appDir(), pluralize(generator), kebabCaseName) : path(appDir(), 'navigation')
+  // Where is the index?
+  const indexFile = path(appDir(), pluralize(generator), 'index.ts')
 
   // find the files
   const files = find(templateDir, { matching: "*" })
@@ -137,7 +144,7 @@ export function generateFromTemplate(generator: string, options: GeneratorOption
 
       // file-specific props
       const data = { props: { ...props, filename } }
-
+      console.log(data)
       // read the template
       const templateContent = filesystem.read(templateFilename)
 
@@ -154,18 +161,93 @@ export function generateFromTemplate(generator: string, options: GeneratorOption
     return destinationFile
   })
 
-  return newFiles
+  const modifiedFiles = ((): string[] => {
+    const modifiedFiles = []
+    switch (true) {
+      case generator === 'component':
+        modifiedFiles.push(addToIndex(kebabCaseName, indexFile, toolbox, generator))
+        modifiedFiles.push(addStory(kebabCaseName, toolbox, generator))
+        break
+      case generator === 'screen':
+        modifiedFiles.push(addToIndex(kebabCaseName, indexFile, toolbox, generator))
+        modifiedFiles.push(addStory(kebabCaseName, toolbox, generator))
+        const [moreNewFiles, moreModifiedFiles] = generateFromTemplate('page', options, toolbox)
+        modifiedFiles.push(...moreModifiedFiles)
+        newFiles.push(...moreNewFiles)
+        if (options.navigators) {
+          const navigatorFiles = addToNavigators(pascalCaseName, options.navigators, toolbox)
+          modifiedFiles.push(...navigatorFiles)
+        }
+        break
+      default:
+        p('This generator is following default case')
+        p('Edit the scripts to include customizations')
+        break
+    }
+    return modifiedFiles
+  })()
+  return [newFiles, modifiedFiles]
+}
+
+export function addToNavigators(pascalCaseName, navigators, toolbox) {
+  const { path } = filesystem
+  const { patching } = toolbox
+  // import to add
+  const importToAdd = `import { ${pascalCaseName} } from "../screens"\n`
+  const indexFile = navigators.map(nav => {
+    const navigatorPath = path(appDir(), 'navigation', nav + '-navigator.tsx')
+    // Actually add the import
+    if (!filesystem.exists(navigatorPath)) {
+      const msg =
+        `No '${navigatorPath}' file found. Can't import component to navigator.` +
+        `Import your new component manually.`
+      p(msg)
+      process.exit(1)
+    }
+    patching.prepend(navigatorPath, importToAdd)
+    return navigatorPath
+  })
+  return indexFile
+}
+export function addToIndex(kebabCaseName, indexFile, toolbox, generator) {
+  const { patching } = toolbox
+
+  // Export to add
+  const exportToAdd = `export * from "./${kebabCaseName}/${kebabCaseName}-${generator}"\n`
+
+  // Actually add the export
+  if (!filesystem.exists(indexFile)) {
+    const msg =
+      `No '${indexFile}' file found. Can't export component.` +
+      `Export your new component manually.`
+    p(msg)
+    process.exit(1)
+  }
+  patching.append(indexFile, exportToAdd)
+  return indexFile
+}
+
+export function addStory(kebabCaseName, toolbox: GluegunToolbox, generator: string) {
+  const { pluralize } = strings
+  const { patching } = toolbox
+  const storyPath = `./storybook/storybook-registry-${pluralize(generator)}.ts`
+  // Add story
+  patching.prepend(
+    storyPath,
+    `require("../app/${pluralize(generator)}/${kebabCaseName}/${kebabCaseName}.story")\n`,
+  )
+  return storyPath
 }
 
 /**
- * Directory where we can find Ignite CLI generator templates
+ * Directory where we can find press CLI generator templates
  */
 function sourceDirectory(): string {
-  return filesystem.path(__filename, "..", "..", "..", "boilerplate", "ignite", "templates")
+  return filesystem.path(__filename, "..", "..", "..", "boilerplate", "press", "templates")
 }
 
 /**
- * Finds generator templates in Ignite CLI
+ * Finds generator templates in press CLI
  */
 export function availableGenerators(): string[] {
   const { subdirectories, separator } = filesystem
@@ -173,19 +255,19 @@ export function availableGenerators(): string[] {
 }
 
 /**
- * Copies over generators (specific generators, or all) from Ignite CLI to the project
- * ignite/templates folder.
+ * Copies over generators (specific generators, or all) from press CLI to the project
+ * press/templates folder.
  */
 export function installGenerators(generators: string[]): string[] {
   const { path, find, copy, dir, cwd, separator, exists, read } = filesystem
   const sourceDir = sourceDirectory()
-  const targetDir = path(cwd(), "ignite", "templates")
+  const targetDir = path(cwd(), "press", "templates")
 
-  if (!isIgniteProject()) {
-    throw new Error("Not in an Ignite root directory (can't find ./ignite folder)")
+  if (!ispressProject()) {
+    throw new Error("Not in an press root directory (can't find ./press folder)")
   }
 
-  // for each generator type, copy it over to the ignite/templates folder
+  // for each generator type, copy it over to the press/templates folder
   const changedGenerators = generators.filter((gen) => {
     const sourceGenDir = path(sourceDir, gen)
     const targetGenDir = path(targetDir, gen)

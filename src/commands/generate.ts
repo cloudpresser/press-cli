@@ -45,7 +45,7 @@ function generate(toolbox: GluegunToolbox) {
     if (availableGenerators().includes(generator)) {
       direction("Install the generator with:")
       p()
-      command(`ignite generate ${generator} --update`)
+      command(`press generate ${generator} --update`)
       p()
       direction("... and then try again!")
     } else {
@@ -58,7 +58,7 @@ function generate(toolbox: GluegunToolbox) {
   // we need a name for this component
   const name = parameters.second
   if (!name) {
-    return warning(`⚠️  Please specify a name for your ${generator}: ignite g ${generator} MyName`)
+    return warning(`⚠️  Please specify a name for your ${generator}: press g ${generator} MyName`)
   }
 
   // avoid the my-component-component phenomenon
@@ -70,12 +70,21 @@ function generate(toolbox: GluegunToolbox) {
       `Note that you don't need to add ${pascalGenerator} to the end of the name -- we'll do it for you!`,
     )
     pascalName = pascalName.slice(0, -1 * pascalGenerator.length)
-    command(`ignite generate ${generator} ${pascalName}`)
+    command(`press generate ${generator} ${pascalName}`)
   }
-
   // okay, let's do it!
+    // Get props for component or screen
+  let navigators
+  if(Object.keys(parameters.options).filter(op => op.split(':')[0] = 'navigators')[0]) navigators = Object.keys(parameters.options).filter(op => op.split(':')[0] = 'navigators')[0].split(':')[1].split(',')
+  console.log(navigators)
+  const props = Object.keys(parameters.options).filter(op => op.split(':')[0]!='navigators')
+    // console.log(props)
   p()
-  const updatedFiles = generateFromTemplate(generator, { name: pascalName })
+  const [newFiles, modifiedFiles] = generateFromTemplate(generator, { name: pascalName, props: props, navigators }, toolbox)
   heading(`Generated new files:`)
-  updatedFiles.forEach((f) => p(f))
+  newFiles.forEach((f) => p(f))
+  if (modifiedFiles.length > 0) {
+    heading(`Updated files:`)
+    modifiedFiles.forEach((f) => p(f))
+  }
 }

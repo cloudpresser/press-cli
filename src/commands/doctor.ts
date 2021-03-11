@@ -1,7 +1,7 @@
 /**
  * This command checks the current dev environment to see if their machine is set up
- * to run Ignite properly. This needs some TLC, as it is mostly designed
- * for the old Ignite CLI and Bowser. Ignite v4 ("flame") is a combination of the two.
+ * to run press properly. This needs some TLC, as it is mostly designed
+ * for the old press CLI and Bowser. press v4 ("flame") is a combination of the two.
  */
 import { GluegunToolbox } from "gluegun"
 import * as os from "os"
@@ -60,17 +60,17 @@ module.exports = {
       [column1("yarn"), column2(yarnVersion), column3(yarnPath)],
     ])
 
-    // -=-=-=- ignite -=-=-=-
-    const ignitePath = which("ignite")
-    const igniteSrcPath = `${meta.src}`
-    const igniteVersion = meta.version()
-    // const igniteJson = ignite.loadIgniteConfig()
+    // -=-=-=- press -=-=-=-
+    const pressPath = which("press")
+    const pressSrcPath = `${meta.src}`
+    const pressVersion = meta.version()
+    // const pressJson = press.loadpressConfig()
     // const installedGenerators = runtime.commands
     //   .filter(cmd => cmd.name === "generate")
     //   .sort((a, b) => (a.commandPath.join(" ") < b.commandPath.join(" ") ? -1 : 1))
     //   .reduce((acc, k) => {
     //     k.plugin.commands.map(c => {
-    //       if (c.plugin.name === k.plugin.name && k.plugin.name !== "ignite" && c.name !== "generate") {
+    //       if (c.plugin.name === k.plugin.name && k.plugin.name !== "press" && c.name !== "generate") {
     //         if (!acc[c.name]) {
     //           acc[c.name] = [k.plugin.name]
     //         } else {
@@ -80,33 +80,33 @@ module.exports = {
     //     })
     //     return acc
     //   }, {})
-    // igniteJson.generators = Object.assign({}, installedGenerators, igniteJson.generators)
+    // pressJson.generators = Object.assign({}, installedGenerators, pressJson.generators)
 
     info("")
-    info(colors.cyan("Ignite"))
-    const igniteTable = []
-    igniteTable.push([column1("ignite-cli"), column2(igniteVersion), column3(ignitePath)])
-    igniteTable.push([
-      column1("ignite src"),
-      column2(igniteSrcPath.split(separator).pop()),
-      column3(igniteSrcPath),
+    info(colors.cyan("Press"))
+    const pressTable = []
+    pressTable.push([column1("press-cli"), column2(pressVersion), column3(pressPath)])
+    pressTable.push([
+      column1("press src"),
+      column2(pressSrcPath.split(separator).pop()),
+      column3(pressSrcPath),
     ])
-    // if (igniteJson) {
-    //   Object.keys(igniteJson).forEach(k => {
-    //     const v = typeof igniteJson[k] === "object" ? JSON.stringify(igniteJson[k]) : igniteJson[k]
+    // if (pressJson) {
+    //   Object.keys(pressJson).forEach(k => {
+    //     const v = typeof pressJson[k] === "object" ? JSON.stringify(pressJson[k]) : pressJson[k]
     //     if (k === "generators") {
-    //       igniteTable.push([column1(k), column2(" "), column3("")])
-    //       Object.keys(igniteJson[k]).forEach(t => {
-    //         const l = Array.isArray(igniteJson[k][t]) ? igniteJson[k][t].join(", ") : igniteJson[k][t]
-    //         igniteTable.push([column1(""), column2(t), column3(l)])
+    //       pressTable.push([column1(k), column2(" "), column3("")])
+    //       Object.keys(pressJson[k]).forEach(t => {
+    //         const l = Array.isArray(pressJson[k][t]) ? pressJson[k][t].join(", ") : pressJson[k][t]
+    //         pressTable.push([column1(""), column2(t), column3(l)])
     //       })
     //     } else {
-    //       igniteTable.push([column1(k), column2(v), column3("")])
+    //       pressTable.push([column1(k), column2(v), column3("")])
     //     }
     //   })
     // }
 
-    table(igniteTable)
+    table(pressTable)
 
     // -=-=-=- android -=-=-=-
     const androidPath = process.env.ANDROID_HOME
