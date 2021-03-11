@@ -1,0 +1,16 @@
+import * as React from "react"
+import { Presentation, <%= props.pascalCaseName %>Props } from "./presentation"
+import { observer } from "mobx-react-lite"
+// import { useStores } from "../models/root-store"
+
+
+export const <%= props.pascalCaseName %>: React.FunctionComponent<<%= props.pascalCaseName %>Props> = observer((props) => {
+  // Pull in one of our MST stores
+  // const { someStore, anotherStore } = useStores()
+
+  // Pull in navigation via hook
+  // const navigation = useNavigation()
+  return (
+    <Presentation />
+  )
+})

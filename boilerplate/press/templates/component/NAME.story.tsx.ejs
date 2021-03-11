@@ -1,0 +1,22 @@
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
+import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+import { <%= props.pascalCaseName %> } from "./<%= props.kebabCaseName %>-component"
+import { <%= props.pascalCaseName %>PresetNames, <%= props.camelCaseName %>Presets } from "./<%= props.kebabCaseName %>.presets"
+
+declare let module
+
+storiesOf("<%= props.pascalCaseName %>", module)
+  .addDecorator(fn => <StoryScreen>{fn()}</StoryScreen>)
+  .add("Style Presets", () => (
+    <Story>
+      {Object.keys(<%= props.camelCaseName %>Presets).map(preset => (
+        <UseCase text={preset} key={preset} usage={"The" + preset}>
+          <<%= props.pascalCaseName %>
+            text="<%= props.pascalCaseName %>"
+            preset={preset as <%= props.pascalCaseName %>PresetNames}
+          />
+        </UseCase>
+      ))}
+    </Story>
+  ))
