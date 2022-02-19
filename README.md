@@ -1,68 +1,94 @@
-<p align="center"><img src="http://ir_public.s3.amazonaws.com/projects/ignite/ignite-bowser-launch-screen.png" alt="logo" width="414px"></p>
+# Press-cli
 
-# Ignite - the hottest React Native boilerplate
+Press was made to be a tool to help you rapidly develop with typescript, react-native ~~, graphql and serverless functions~~.
 
-<a href="https://badge.fury.io/js/ignite" target="_blank"><img src="https://badge.fury.io/js/ignite.svg" alt="npm version" height="20"></a>
+It achive this by giving you a quick way to:
 
-## Battle-tested React Native boilerplate
+- Have a project up with database, api and supporting serverless functions without writing boilerplate or extensive configuration
+- Enjoy awesome development support features and skip boilerplate code by generating new aspects of your application such as screens, components, ~~scripts and serverless functions~~ using completely customizable and extensible generator templates
+- WIP: Deploy your project's infrastructure in minutes with preconfigured services, and customizable options using or developing your own plugins
 
-The culmination of five years of constant React Native development, Ignite is the most popular React Native app boilerplate for both Expo and bare React Native.
+<!-- But you can use it your own stack of choice. -->
 
-This is the React Native boilerplate that the [CloudPresser](https://infinite.red) team uses on a day-to-day basis to build client apps. Developers who use Ignite report that it saves them two to four weeks of time on average off the beginning of their React Native project!
+## Getting started
 
-_NOTE: Ignite CLI version 4.0 now includes the boilerplate -- read [the blog post](TODOURLHERE) to find out why!_
+- ~~Have docker installed~~
+  - No docker knowledge needed, it just runs in the background!
+  - How to install docker docs here...
+- Install press
 
-## Tech Stack
+  - `yarn global add press-cli`
 
-Ignite apps include the following rock-solid technical decisions out of the box:
+- Create a new project
 
-- React Native
-- React Navigation 5
-- MobX-State-Tree [(Why not Redux?)](#About-The-Stack)
-- MobX-React-Lite
-- TypeScript
-- AsyncStorage (integrated with MST for restoring state)
-- apisauce (to talk to REST servers)
-- Flipper-ready
-- Reactotron-ready (and pre-integrated with MST)
-- Supports Expo out of the box
-- And more!
+  - `press new $projectName`
 
-## Quick Start
+- Go to your new project
 
-Prerequisites:
+  - `cd $projectName`
 
-- For [Expo-powered React Native apps](https://expo.io/), no prerequisites are necessary ([why choose Expo?](https://medium.com/@adhithiravi/building-react-native-apps-expo-or-not-d49770d1f5b8))
-- For vanilla React Native, make sure you're set up for React Native [by following our free CloudPresser Academy course](https://academy.infinite.red/p/installing-react-native-tutorial-on-macos) first
+- Start developing
+  - `yarn start`
 
-Run the CLI:
+And you have a new mobile app running with react native, ~~postgres database, graphql api and serverless functions~~ ready to be developped with generators for all of them!
 
-```bash
-# for vanilla React Native
-npx ignite-cli new PizzaApp
-# or for Expo-powered:
-npx ignite-cli new PizzaApp --expo
-```
-
-Ignite will walk you through the rest. If you'd like to follow a tutorial, check out [this one from Robin Heinze](https://shift.infinite.red/creating-a-trivia-app-with-ignite-bowser-part-1-1987cc6e93a1).
-
-## Generators
-
-_The true gem of Ignite._ Generators help you scaffold your app very quickly, be it for a proof-of-concept, a demo, or a production app. Generators are there to save you time, keep your code consistent, and help you with the basic structure of your app.
+## WIP: File Structure
 
 ```
-ignite generate --help
+/project_name
+|---/package.json
+|---/press.json ? => configuration for each plugin
+|---/mobile
+|---/web
+|---/shared
+|---|---/utils
+|---|---/scripts
+|---|---/models
+|---/functions
+|---/press
+|---|---/templates
+|---|---|---/mobile
+|---|---|---|---/screen
+|---|---|---|---/component
+|---|---|---/web
+|---|---|---/shared
+|---|---|---|---/utils
+|---|---|---|---/scripts
+|---|---|---|---/models
+|---/functions
+|---/node_modules *ignored
+|---/db_data *ignored
+|---/files *ignored
 ```
 
-...will give you information on what generators are present. To learn more, check out our [Generators](https://github.com/infinitered/ignite/blob/master/docs/Generators.md) documentation.
+## Commands
 
-## Troubleshooting
+- `press generate $generator_name $instance_name`
+  - scans generators for folder of `$generator_name`
+    - if found, outputs evaluates template inside `/project_name/press/templates` using `$instance_name` and outputs to relative path inside `/project_name`
+  - if `$generator_name === list`, press will output all available generators
+- `press new $project_name`
+  - Creates a new Press project
+- WIP: `press start $plugin_name`
+  - runs configured start command for specified plugin inside plugin folder
+  - start command must be configured inside press.json
+  - if no `$plugin_name`, it will start all plugins
+- WIP: `press develop $plugin_name`
+  - runs configured develop command for specified plugin inside plugin folder
+  - develop command must be configured inside press.json
+  - if no `$plugin_name`, it will run the develop for all plugins
+- WIP: `press deploy $plugin_name`
+  - deploys specified plugin to production
+  - if no `$plugin_name`, it will deploy all plugins
+- WIP: `press install $plugin_name`
+  - installs a press plugin
+  - press plugins are hosted on npm and package name must start with press
+  - installing a plugin will scaffold the plugin inside your press project
+- WIP: `press eject $plugin_name`
+  - outputs a plugin's default generators to the root of your press project
+  - generators can now be edited as needed
 
-If you run into problems, first search the issues in this repository. If you don't find anything, you can come talk to our friendly and active developers in the CloudPresser Community Slack ([community.infinite.red](http://community.infinite.red)).
+## WIP: Plugins
 
-## Further Reading
-
-- Watch Jamon Holmgren's talk at React Live Amsterdam where he uses Ignite to build an app in less than 30 minutes: [https://www.youtube.com/watch?v=Pb8MWkQ9GOc](https://www.youtube.com/watch?v=Pb8MWkQ9GOc)
-- Prior art includes [Ignite Andross](https://github.com/infinitered/ignite-andross) and [Ignite Bowser](https://github.com/infinitered/ignite-bowser) (which is very similar to the current version of Ignite).
-- [Check out Gluegun](https://github.com/infinitered/gluegun) - Ignite CLI is powered by Gluegun, which lets you build CLI apps painlessly!
-- [Who are We?](https://infinite.red) - Learn More About CloudPresser
+Plugins are distinct aspects of a press application.
+A plugin is a way for developers to bring their own needs into press

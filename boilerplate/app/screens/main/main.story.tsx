@@ -5,13 +5,13 @@
 */
 import * as React from "react"
 import { storiesOf } from "@storybook/react-native"
-import { Presentation } from "./<%= props.kebabCaseName %>-presentation"
+import { Presentation } from "./main-presentation"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 declare var module
 
 storiesOf("Screens", module)
-  .add("<%= props.pascalCaseName %>", () => (
+  .add("Main", () => (
     <SafeAreaProvider>
       <Presentation />
     </SafeAreaProvider>

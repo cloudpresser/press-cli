@@ -1,0 +1,16 @@
+/*
+* Some Components need to render in unique ways in some screens
+* Presets help us reuse most of the component while creating unique variations of it
+* Use this file to create your own presets, where needed.
+* Remember! NOT ALL COMPONENTS NEED PRESET. This file is here to help you, so don't feel like you need to use it!
+*/
+
+export const <%= props.pascalCaseName %>Presets = {
+  primary: {
+    color: "blue",
+  },
+  secondary: {
+    color: "white",
+  },
+}
+export type <%= props.pascalCaseName %>PresetNames = keyof typeof <%= props.pascalCaseName %>Presets

@@ -1,16 +1,16 @@
+/*
+* This file is responsible for rendering your screen inside the app.
+* All functions should be defined in <%= props.kebabCaseName %>-functions so they can be exported and tested!
+* Treat this file as a container.
+*/
+
 import * as React from "react"
-import { Presentation, <%= props.pascalCaseName %>Props } from "./presentation"
-import { observer } from "mobx-react-lite"
-// import { useStores } from "../models/root-store"
+import { Presentation } from "./<%= props.kebabCaseName %>-presentation"
+import { <%= props.pascalCaseName %>Props } from "./<%= props.kebabCaseName %>-interface"
 
+export const <%= props.pascalCaseName %> = (props: <%= props.pascalCaseName %>Props) => {
+  // Grab the props here!
+  const { style, navigation } = props;
 
-export const <%= props.pascalCaseName %>: React.FunctionComponent<<%= props.pascalCaseName %>Props> = observer((props) => {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
-  return (
-    <Presentation />
-  )
-})
+  return <Presentation style={style} />;
+};

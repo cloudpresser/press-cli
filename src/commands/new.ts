@@ -38,7 +38,7 @@ export default {
     }
 
     // expo or no?
-    const expo = Boolean(parameters.options.expo)
+    const expo = true
     const cli = expo ? "expo-cli" : "react-native-cli"
     const pressPath = path(`${meta.src}`, "..")
     const boilerplatePath = path(pressPath, "boilerplate")
@@ -100,44 +100,44 @@ export default {
     packageJsonRaw = packageJsonRaw
       .replace(/HelloWorld/g, projectName)
       .replace(/hello-world/g, projectNameKebab)
-    let packageJson = JSON.parse(packageJsonRaw)
+    const packageJson = JSON.parse(packageJsonRaw)
 
-    packageJson.scripts.prepare = "npm-run-all patch hack:*"
-    if (expo) {
-      const merge = require("deepmerge-json")
-      const expoJson = filesystem.read("package.expo.json", "json")
-      packageJson = merge(packageJson, expoJson)
-    }
+    // packageJson.scripts.prepare = "npm-run-all patch hack:*"
+    // if (expo) {
+    //   const merge = require("deepmerge-json")
+    //   const expoJson = filesystem.read("package.expo.json", "json")
+    //   packageJson = merge(packageJson, expoJson)
+    // }
     filesystem.write("package.json", packageJson)
 
     // More Expo-specific changes
     if (expo) {
       // remove the ios and android folders
-      filesystem.remove("./ios")
-      filesystem.remove("./android")
+      // filesystem.remove("./ios")
+      // filesystem.remove("./android")
 
       // rename the index.js to App.js, which expo expects;
       // update the reference to it in tsconfig, too
-      filesystem.rename("./index.js", "App.js")
-      await toolbox.patching.update("tsconfig.json", (config) => {
-        config.include[0] = "App.js"
-        return config
-      })
+      // filesystem.rename("./index.js", "App.js")
+      // await toolbox.patching.update("tsconfig.json", (config) => {
+      //   config.include[0] = "App.js"
+      //   return config
+      // })
 
       // use Detox Expo reload file
-      filesystem.remove("./e2e/reload.js")
-      filesystem.rename("./e2e/reload.expo.js", "reload.js")
+      // filesystem.remove("./e2e/reload.js")
+      // filesystem.rename("./e2e/reload.expo.js", "reload.js")
 
       // use Expo AsyncStorage file
-      filesystem.remove("./app/utils/storage/async-storage.ts")
-      filesystem.rename("./app/utils/storage/async-storage.expo.ts", "async-storage.ts")
+      // filesystem.remove("./app/utils/storage/async-storage.ts")
+      // filesystem.rename("./app/utils/storage/async-storage.expo.ts", "async-storage.ts")
 
       p(`🧶 Unboxing NPM dependencies`)
       await packager.install({ onProgress: log })
 
       // for some reason we need to do this, or we get an error about duplicate RNCSafeAreaProviders
       // see https://github.com/th3rdwave/react-native-safe-area-context/issues/110#issuecomment-668864576
-      await packager.add("react-native-safe-area-context", { expo: true })
+      // await packager.add("react-native-safe-area-context", { expo: true })
     } else {
       // remove the Expo-specific files -- not needed
       filesystem.remove(`./bin/downloadExpoApp.sh`)
@@ -150,10 +150,10 @@ export default {
     }
 
     // remove the expo-only package.json
-    filesystem.remove("package.expo.json")
+    // filesystem.remove("package.expo.json")
 
     // Make sure all our modifications are formatted nicely
-    await spawnProgress("yarn format", {})
+    // await spawnProgress("yarn format", {})
 
     // commit any changes
     if (parameters.options.git !== false) {
@@ -198,10 +198,10 @@ export default {
         )
       }
     }
-    p()
-    p("Need additional help?")
-    p()
-    direction("Join our Slack community at http://community.infinite.red.")
+    // p()
+    // p("Need additional help?")
+    // p()
+    // direction("Join our Slack community at http://community.infinite.red.")
     p()
     heading("Now get cooking! 🍽")
     pressHeading()

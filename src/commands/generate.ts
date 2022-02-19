@@ -7,6 +7,7 @@ import {
   availableGenerators,
   generateFromTemplate,
 } from "../tools/generators"
+import { executeImports } from "../tools/importers"
 
 module.exports = {
   alias: ["g", "generator", "generators"],
@@ -30,14 +31,40 @@ module.exports = {
     }
   },
 }
-
-function generate(toolbox: GluegunToolbox) {
+export function commandParser(toolbox) {
   const { parameters, strings } = toolbox
-
+  const generator = parameters.first.toLowerCase()
+  const name = parameters.second
+  let pascalName = strings.pascalCase(name)
+  // avoid the my-component-component phenomenon
+  const pascalGenerator = strings.pascalCase(generator)
+  if (pascalName.endsWith(pascalGenerator)) {
+    p(`Stripping ${pascalGenerator} from end of name`)
+    p(
+      `Note that you don't need to add ${pascalGenerator} to the end of the name -- we'll do it for you!`,
+    )
+    pascalName = pascalName.slice(0, -1 * pascalGenerator.length)
+    command(`press generate ${generator} ${pascalName}`)
+  }
+  // Parse options
+  const navigators = Object.keys(parameters.options)
+    .filter((op) => (op.split(":")[0] = "navigators"))[0]
+    ?.split(":")[1]
+    ?.split(",")
+  const props = Object.keys(parameters.options).filter((op) => op.split(":")[0] !== "navigators")
+  return {
+    name,
+    pascalName,
+    generator,
+    props,
+    navigators,
+  }
+}
+function generate(toolbox: GluegunToolbox) {
   const generators = installedGenerators()
 
-  // what generator are we running?
-  const generator = parameters.first.toLowerCase()
+  // Parse command
+  const { name, pascalName, generator, props } = commandParser(toolbox)
   if (!generators.includes(generator)) {
     warning(`⚠️  Generator "${generator}" isn't installed.`)
     p()
@@ -56,33 +83,15 @@ function generate(toolbox: GluegunToolbox) {
   }
 
   // we need a name for this component
-  const name = parameters.second
   if (!name) {
     return warning(`⚠️  Please specify a name for your ${generator}: press g ${generator} MyName`)
   }
-
-  // avoid the my-component-component phenomenon
-  const pascalGenerator = strings.pascalCase(generator)
-  let pascalName = strings.pascalCase(name)
-  if (pascalName.endsWith(pascalGenerator)) {
-    p(`Stripping ${pascalGenerator} from end of name`)
-    p(
-      `Note that you don't need to add ${pascalGenerator} to the end of the name -- we'll do it for you!`,
-    )
-    pascalName = pascalName.slice(0, -1 * pascalGenerator.length)
-    command(`press generate ${generator} ${pascalName}`)
-  }
   // okay, let's do it!
-    // Get props for component or screen
-  let navigators
-  if(Object.keys(parameters.options).filter(op => op.split(':')[0] = 'navigators')[0]) navigators = Object.keys(parameters.options).filter(op => op.split(':')[0] = 'navigators')[0].split(':')[1].split(',')
-  console.log(navigators)
-  const props = Object.keys(parameters.options).filter(op => op.split(':')[0]!='navigators')
-    // console.log(props)
   p()
-  const [newFiles, modifiedFiles] = generateFromTemplate(generator, { name: pascalName, props: props, navigators }, toolbox)
+  const newFiles = generateFromTemplate(generator, { name: pascalName, props: props }, toolbox)
   heading(`Generated new files:`)
   newFiles.forEach((f) => p(f))
+  const modifiedFiles = executeImports(toolbox)
   if (modifiedFiles.length > 0) {
     heading(`Updated files:`)
     modifiedFiles.forEach((f) => p(f))

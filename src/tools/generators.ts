@@ -4,7 +4,7 @@ import { command, heading, pressHeading, p, warning } from "./pretty"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function showGeneratorHelp(toolbox: GluegunToolbox) {
-  const inpress = ispressProject()
+  const inpress = isPressProject()
   const generators = inpress ? installedGenerators() : []
 
   pressHeading()
@@ -16,11 +16,12 @@ export function showGeneratorHelp(toolbox: GluegunToolbox) {
   heading("Commands")
   p()
   command("--list  ", "List installed generators", ["press g --list"])
-  command(
-    "--update",
-    "Update installed generators. You can also use the 'press update X' format",
-    ["press g --update", `press g model --update`, `press update model`, `press update --all`],
-  )
+  command("--update", "Update installed generators. You can also use the 'press update X' format", [
+    "press g --update",
+    `press g model --update`,
+    `press update model`,
+    `press update --all`,
+  ])
   warning("          ⚠️  this erases any customizations you've made!")
   p()
   heading("Installed generators")
@@ -61,7 +62,7 @@ export function updateGenerators(toolbox: GluegunToolbox) {
   })
 }
 
-export function ispressProject(): boolean {
+export function isPressProject(): boolean {
   return filesystem.exists("./press") === "dir"
 }
 
@@ -70,7 +71,7 @@ function pressDir() {
   return filesystem.path(cwd, "press")
 }
 
-function appDir() {
+export function appDir() {
   const cwd = process.cwd()
   return filesystem.path(cwd, "app")
 }
@@ -91,20 +92,25 @@ export function installedGenerators(): string[] {
 }
 
 type GeneratorOptions = {
-  name: string,
-  props?: string[],
+  name: string
+  props?: string[]
   navigators?: string[]
 }
-
 /**
  * Generates something using a template
  */
-export function generateFromTemplate(generator: string, options: GeneratorOptions, toolbox:GluegunToolbox): string[] [] {
+export function generateFromTemplate(
+  generator: string,
+  options: GeneratorOptions,
+  toolbox: GluegunToolbox,
+): string[] {
   const { find, path, dir, copy, separator } = filesystem
   const { pascalCase, kebabCase, pluralize, camelCase } = strings
-  // console.log(options.props)
-  const componentProps = options.props.length > 0 ? options.props.map(prop => ({ prop: prop.split(':')[0], type: prop.split(':')[1] })) : [{ prop: 'text', type: 'string' }]
-  console.log(componentProps)
+  const componentProps =
+    options.props.length > 0
+      ? options.props.map((prop) => ({ prop: prop.split(":")[0], type: prop.split(":")[1] }))
+      : []
+  // console.log(componentProps)
   // permutations of the name
   const pascalCaseName = pascalCase(options.name)
   const kebabCaseName = kebabCase(options.name)
@@ -116,10 +122,10 @@ export function generateFromTemplate(generator: string, options: GeneratorOption
   // where are we copying from?
   const templateDir = path(templatesDir(), generator)
   // where are we copying to?
-  let destinationDir
-  destinationDir = generator != 'navigator' ? path(appDir(), pluralize(generator), kebabCaseName) : path(appDir(), 'navigation')
-  // Where is the index?
-  const indexFile = path(appDir(), pluralize(generator), 'index.ts')
+  const destinationDir =
+    generator !== "navigator"
+      ? path(appDir(), pluralize(generator), kebabCaseName)
+      : path(appDir(), "navigation")
 
   // find the files
   const files = find(templateDir, { matching: "*" })
@@ -161,82 +167,7 @@ export function generateFromTemplate(generator: string, options: GeneratorOption
     return destinationFile
   })
 
-  const modifiedFiles = ((): string[] => {
-    const modifiedFiles = []
-    switch (true) {
-      case generator === 'component':
-        modifiedFiles.push(addToIndex(kebabCaseName, indexFile, toolbox, generator))
-        modifiedFiles.push(addStory(kebabCaseName, toolbox, generator))
-        break
-      case generator === 'screen':
-        modifiedFiles.push(addToIndex(kebabCaseName, indexFile, toolbox, generator))
-        modifiedFiles.push(addStory(kebabCaseName, toolbox, generator))
-        const [moreNewFiles, moreModifiedFiles] = generateFromTemplate('page', options, toolbox)
-        modifiedFiles.push(...moreModifiedFiles)
-        newFiles.push(...moreNewFiles)
-        if (options.navigators) {
-          const navigatorFiles = addToNavigators(pascalCaseName, options.navigators, toolbox)
-          modifiedFiles.push(...navigatorFiles)
-        }
-        break
-      default:
-        p('This generator is following default case')
-        p('Edit the scripts to include customizations')
-        break
-    }
-    return modifiedFiles
-  })()
-  return [newFiles, modifiedFiles]
-}
-
-export function addToNavigators(pascalCaseName, navigators, toolbox) {
-  const { path } = filesystem
-  const { patching } = toolbox
-  // import to add
-  const importToAdd = `import { ${pascalCaseName} } from "../screens"\n`
-  const indexFile = navigators.map(nav => {
-    const navigatorPath = path(appDir(), 'navigation', nav + '-navigator.tsx')
-    // Actually add the import
-    if (!filesystem.exists(navigatorPath)) {
-      const msg =
-        `No '${navigatorPath}' file found. Can't import component to navigator.` +
-        `Import your new component manually.`
-      p(msg)
-      process.exit(1)
-    }
-    patching.prepend(navigatorPath, importToAdd)
-    return navigatorPath
-  })
-  return indexFile
-}
-export function addToIndex(kebabCaseName, indexFile, toolbox, generator) {
-  const { patching } = toolbox
-
-  // Export to add
-  const exportToAdd = `export * from "./${kebabCaseName}/${kebabCaseName}-${generator}"\n`
-
-  // Actually add the export
-  if (!filesystem.exists(indexFile)) {
-    const msg =
-      `No '${indexFile}' file found. Can't export component.` +
-      `Export your new component manually.`
-    p(msg)
-    process.exit(1)
-  }
-  patching.append(indexFile, exportToAdd)
-  return indexFile
-}
-
-export function addStory(kebabCaseName, toolbox: GluegunToolbox, generator: string) {
-  const { pluralize } = strings
-  const { patching } = toolbox
-  const storyPath = `./storybook/storybook-registry-${pluralize(generator)}.ts`
-  // Add story
-  patching.prepend(
-    storyPath,
-    `require("../app/${pluralize(generator)}/${kebabCaseName}/${kebabCaseName}.story")\n`,
-  )
-  return storyPath
+  return newFiles
 }
 
 /**
@@ -263,7 +194,7 @@ export function installGenerators(generators: string[]): string[] {
   const sourceDir = sourceDirectory()
   const targetDir = path(cwd(), "press", "templates")
 
-  if (!ispressProject()) {
+  if (!isPressProject()) {
     throw new Error("Not in an press root directory (can't find ./press folder)")
   }
 

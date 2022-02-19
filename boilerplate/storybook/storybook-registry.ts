@@ -1,2 +1,2 @@
-require("./storybook-registry-screens")
-require("./storybook-registry-components")
+require("../app/screens/storybook-registry");
+require("../app/components/storybook-registry");

@@ -1,6 +1,6 @@
 {
   "name": "press-cli",
-  "version": "0.0.2-rc2",
+  "version": "0.0.3",
   "description": "CloudPresser's all-inclusive React Native command line tool.",
   "bin": {
     "press": "bin/press",

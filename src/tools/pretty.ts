@@ -3,7 +3,7 @@ import { print } from "gluegun/print"
 const { cyan, gray, white, bold, yellow } = print.colors
 const { underline } = print.colors
 
-export const p = (m = "") => print.info(gray(`   ${m}`))
+export const p = (m = "") => print.info(`   ${m}`)
 export const heading = (m = "") => p(white(bold(m)))
 export const link = (m = "") => underline(white(m))
 // export const pressHeading = (m = "") => p(red(bold(m)))
@@ -22,8 +22,7 @@ export const pressHeading = () =>
    \\:\\__\\      \\:\\__\\        \\::/  /        /:/  /        /:/  /    
     \\/__/       \\/__/         \\/__/         \\/__/         \\/__/     
     
-    `,
-    ),
+    `),
   )
 export const command = (m = "", second = "", examples: string[] = []) => {
   p(white(m) + "  " + gray(second))
