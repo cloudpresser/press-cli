@@ -1,0 +1,30 @@
+/*
+* Use this file to create your component! 
+* Components should not contain internal state or logic! Leave that to containers or screens!
+* Use the presets file to create new variations of your component 
+* Each preset can have it's own variables that are used to render it, like styles or boolean flags
+*/
+
+import * as React from "react"
+import { View } from "react-native"
+import { <%= props.pascalCaseName %>Props } from "./<%= props.kebabCaseName %>-interface"
+import { <%= props.pascalCaseName %>Presets } from "./<%= props.kebabCaseName %>-presets"
+
+/**
+ * Describe your new component here...
+ */
+ export const <%= props.pascalCaseName %> = (props: <%= props.pascalCaseName %>Props) => {
+
+  // INCOMING PROPS
+  const { preset = "primary", style } = props;
+
+  // PRESET VARIABLES
+  const { color } = <%= props.pascalCaseName %>Presets[preset];
+
+  return (
+    <View style={style}>
+      <View style={{ height: 100, width: 100, backgroundColor: color }}></View>
+    </View>
+  )
+}
+

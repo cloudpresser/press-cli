@@ -1,0 +1,10 @@
+{
+  "press": {
+    "open": "Open",
+    "toStartEditing": "to start editing!"
+  },
+  "storybook": {
+    "placeholder": "Placeholder",
+    "field": "Field"
+  }
+}

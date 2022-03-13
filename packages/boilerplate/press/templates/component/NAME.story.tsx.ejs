@@ -1,0 +1,22 @@
+/*
+* Storybooks is our way to quickly test our components in isolation.
+* Use this file to render all your presets and expected variations of props
+* This should help you quickly visualize how your code affects all different ways a component may be used. 
+*/
+import * as React from "react"
+import { storiesOf } from "@storybook/react-native"
+import { StoryScreen, Story, UseCase } from "../../../storybook/views"
+import { <%= props.pascalCaseName %> } from "./<%= props.kebabCaseName %>-component"
+
+storiesOf("Components", module)
+  .addDecorator((fn) => <StoryScreen>{fn()}</StoryScreen>)
+  .add("<%= props.pascalCaseName %>", () => (
+    <Story>
+      <UseCase text="Default" usage="No presets selected, therefore using default.">
+        <<%= props.pascalCaseName %> />
+      </UseCase>
+      <UseCase text="Secondary" usage="The secondary preset.">
+        <<%= props.pascalCaseName %> preset='secondary' />
+      </UseCase>
+    </Story>
+  ))
