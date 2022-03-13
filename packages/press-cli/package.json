@@ -1,6 +1,6 @@
 {
   "name": "press-cli",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "CloudPresser's all-inclusive React Native command line tool.",
   "bin": {
     "press": "bin/press",
@@ -45,7 +45,7 @@
     "npm": ">=4.x"
   },
   "dependencies": {
-    "@cloudpresser/expo-template": "^0.0.1",
+    "@cloudpresser/expo-template": "^0.1.0",
     "deepmerge-json": "^1.1.0",
     "gluegun": "^4.5.0"
   },
