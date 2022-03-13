@@ -8,7 +8,7 @@
   },
   "preferGlobal": true,
   "license": "MIT",
-  "repository": "infinitered/press",
+  "repository": "http://lab.cloudpresser.com/cloudpresser/press-cli",
   "homepage": "http://lab.cloudpresser.com/cloudpresser/press-cli",
   "files": [
     "boilerplate",
