@@ -41,7 +41,9 @@ export default {
     const expo = true
     const cli = expo ? "expo-cli" : "react-native-cli"
     const pressPath = path(`${meta.src}`, "..")
-    const boilerplatePath = path(pressPath, "boilerplate")
+    // const nodeModulesPath = path(pressPath,"node_modules/@cloudpresser/expo-template")
+    const boilerplatePath = path(require.resolve("@cloudpresser/expo-template/package.json"), "..")
+    // const boilerplatePath = path(nodeModulesPath, "boilerplate")
     const cliEnv = expo && debug ? { ...process.env, EXPO_DEBUG: 1 } : process.env
     const cliString = expo
       ? `npx expo-cli init ${projectName} --template @cloudpresser/expo-template --non-interactive`

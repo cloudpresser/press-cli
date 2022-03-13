@@ -45,10 +45,12 @@
     "npm": ">=4.x"
   },
   "dependencies": {
+    "@cloudpresser/expo-template": "^0.0.1",
     "deepmerge-json": "^1.1.0",
     "gluegun": "^4.5.0"
   },
   "devDependencies": {
+    "@cloudpresser/expo-template": "0.0.1",
     "@semantic-release/git": "^9.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "12.12.30",
