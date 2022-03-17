@@ -47,7 +47,7 @@ export default {
       p,
       path
     }
-    const pluginList = ["@cloudpresser/expo-template"]
+    const pluginList = ["@cloudpresser/press-template"]
     const pluginInstallManager = new PluginInstallManager(pluginList, toolbox, utils)
     
     // welcome everybody!
